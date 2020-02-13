@@ -29,29 +29,43 @@ class TransformedStation(faust.Record):
     line: str
 
 
-# TODO: Define a Faust Stream that ingests data from the Kafka Connect stations topic and
-#   places it into a new topic with only the necessary information.
+# Define a Faust Stream that ingests data from the Kafka Connect stations topic and
+# places it into a new topic with only the necessary information.##step1
 app = faust.App("stations-stream", broker="kafka://localhost:9092", store="memory://")
-# TODO: Define the input Kafka Topic. Hint: What topic did Kafka Connect output to?
-# topic = app.topic("TODO", value_type=Station)
-# TODO: Define the output Kafka Topic
-# out_topic = app.topic("TODO", partitions=1)
-# TODO: Define a Faust Table
-#table = app.Table(
-#    # "TODO",
-#    # default=TODO,
-#    partitions=1,
-#    changelog_topic=out_topic,
-#)
+# Define the input Kafka Topic. Hint: What topic did Kafka Connect output to?##step2
+topic = app.topic("com.udacity.cta.station", value_type=Station)
+# Define the output Kafka Topic##step3
+out_topic = app.topic("com.udacity.cta.station.table.v1", partitions=1)
+#Define a Faust Table
+table = app.Table(
+    "com.udacity.cta.station.table.v1",
+    default= TransformedStation,
+    partitions=1,
+    changelog_topic=out_topic,
+)
 
-
-#
-#
-# TODO: Using Faust, transform input `Station` records into `TransformedStation` records. Note that
+# Using Faust, transform input `Station` records into `TransformedStation` records. Note that
 # "line" is the color of the station. So if the `Station` record has the field `red` set to true,
-# then you would set the `line` of the `TransformedStation` record to the string `"red"`
-#
-#
+# then you would set the `line` of the `TransformedStation` record to the string `"red"` ##step3
+@app.agent(topic)
+async def process(stream):
+    async for event in stream:
+        line = None
+        if event.red is True:
+            line = "red"
+        elif event.blue is True:
+            line = "blue"
+        elif event.green is True:
+            line = "green"
+        else:
+            logger.info(f"No line color for {info.station_id}")
+
+        table[event.station_id] = TransformedStation(
+            station_id=event.station_id,
+            station_name=event.station_name,
+            order=event.order,
+            line=line,
+        )
 
 
 if __name__ == "__main__":
