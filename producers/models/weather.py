@@ -33,7 +33,7 @@ class Weather(Producer):
         # Complete the below by deciding on a topic name, number of partitions, and number of
         # replicas ##step1
         super().__init__(
-            topic_name = "com.udacity.cta.weather.arrivals.v1"
+            topic_name = "com.udacity.cta.weather.arrivals.v1",
             key_schema=Weather.key_schema,
             value_schema=Weather.value_schema,
         )

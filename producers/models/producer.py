@@ -9,7 +9,7 @@ from confluent_kafka.avro import AvroProducer
 
 logger = logging.getLogger(__name__)
 ## kafka setup
-BOOTSTRAP_SERVERS = "PLAINTEXT://kafka0:9092"
+BOOTSTRAP_SERVERS = "PLAINTEXT://0.0.0.0:9092,PLAINTEXT://0.0.0.0:9093,PLAINTEXT://0.0.0.0:9094"
 SCHEMA_REGISTRY_URL = "http://schema-registry:8081/"
 
 class Producer:

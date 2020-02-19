@@ -14,9 +14,7 @@ logger = logging.getLogger(__name__)
 class Turnstile(Producer):
     key_schema = avro.load(f"{Path(__file__).parents[0]}/schemas/turnstile_key.json")
     # Define this value schema in `schemas/turnstile_value.json, then uncomment the below ##step1
-    value_schema = avro.load(
-        f"{Path(__file__).parents[0]}/schemas/turnstile_value.json"
-    )
+    value_schema = avro.load(f"{Path(__file__).parents[0]}/schemas/turnstile_value.json")
 
     def __init__(self, station):
         """Create the Turnstile"""
@@ -30,7 +28,7 @@ class Turnstile(Producer):
         # Complete the below by deciding on a topic name, number of partitions, and number of
         # replicas ##step2
         super().__init__(
-            topic_name="com.udacity.cta.turnstile.arrivals.v1"
+            topic_name="com.udacity.cta.turnstile.v1",
             key_schema=Turnstile.key_schema,
             value_schema=Turnstile.value_schema,
             num_partitions=5,
@@ -45,7 +43,7 @@ class Turnstile(Producer):
         #logger.info("turnstile kafka integration incomplete - skipping")
         # Complete this function by emitting a message to the turnstile topic for the number
         # of entries that were calculated ##step3
-     logger.debug(f"Passenger count :{num_entries} on {self.station.name} | {timestamp.isoformat()}")
+        logger.debug(f"Passenger count :{num_entries} on {self.station.name} | {timestamp.isoformat()}")
         # produce a message from 0 to the number of entries
         for _ in range(num_entries):
             try:

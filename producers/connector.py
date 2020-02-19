@@ -45,7 +45,9 @@ def configure_connector():
                 "incrementing.column.name": "stop_id",
                 "topic.prefix": "com.udacity.",
                 "poll.interval.ms": "3600000", ## 1000 * 60 * 30 # 30 minutes
-
+                }
+            })
+        )
     ## Ensure a healthy response was given
     resp.raise_for_status()
     logging.debug("connector created successfully")
