@@ -57,7 +57,7 @@ class Line:
     def process_message(self, message):
         """Given a kafka message, extract data"""
         # Based on the message topic, call the appropriate handler. ##step2
-        if message.topic() == "com.udacity.stations.table":
+        if message.topic() == "^com.udacity.stations.table.":
             try:
                 value = json.loads(message.value())
                 self._handle_station(value)
@@ -65,7 +65,7 @@ class Line:
                 logger.fatal("bad station? %s, %s", value, e)
         elif "arrivals" in message.topic():
             self._handle_arrival(message)
-        elif "TURNSTILE_SUMMARY" in message.topic(): 
+        elif "TURNSTILE_SUMMARY" in message.topic():
             json_data = json.loads(message.value())
             station_id = json_data.get("STATION_ID")
             station = self.stations.get(station_id)
