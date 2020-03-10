@@ -8,7 +8,7 @@ import requests
 logger = logging.getLogger(__name__)
 
 
-KAFKA_CONNECT_URL = "http://localhost:8083/connectors"
+KAFKA_CONNECT_URL = "http://kafka-connect:8083/connectors"
 CONNECTOR_NAME = "stations"
 
 def configure_connector():
@@ -25,6 +25,8 @@ def configure_connector():
     # using incrementing mode, with `stop_id` as the incrementing column name.
     # Make sure to think about what an appropriate topic prefix would be, and how frequently Kafka
     # Connect should run this connector (hint: not very often!)
+    logger.debug("Kafka connector code working")
+
     resp = requests.post(
         KAFKA_CONNECT_URL,
         headers={"Content-Type": "application/json"},

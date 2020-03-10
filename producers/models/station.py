@@ -52,12 +52,13 @@ class Station(Producer):
     def run(self, train, direction, prev_station_id, prev_direction):
         """Simulates train arrivals at this station"""
         #Complete this function by producing an arrival message to Kafka ##step5
-        #logger.info("arrival kafka integration incomplete - skipping")
+        logger.debug("Station run function working")
         try:
             self.producer.produce(
                 topic=self.topic_name,
                 key={"timestamp": self.time_millis()},
                 value={
+                        "station_id": self.station_id,
                         "train_id": train.train_id,
                         "direction": direction,
                         "line": self.color.name,
